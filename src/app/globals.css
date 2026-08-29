@@ -223,3 +223,33 @@
     scroll-behavior: auto !important;
   }
 }
+
+@media print {
+  nav,
+  footer button,
+  [aria-label="Jump to contact section"] {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #111111 !important;
+  }
+
+  * {
+    background: transparent !important;
+    color: #111111 !important;
+    border-color: #cccccc !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  section {
+    padding: 1rem 0 !important;
+    break-inside: avoid;
+  }
+}

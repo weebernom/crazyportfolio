@@ -1,6 +1,7 @@
 "use client";
 
-import { Mail } from "lucide-react";
+import { useState } from "react";
+import { Mail, Check, Copy } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "../shared/icons";
 import { contact } from "./data";
 import { useScrollReveal } from "../shared/useScrollReveal";
@@ -128,6 +129,14 @@ function SystemDiagram() {
 
 export function ContactSection() {
   const ref = useScrollReveal<HTMLElement>();
+  const [copied, setCopied] = useState(false);
+
+  const copyEmail = async () => {
+    await navigator.clipboard.writeText(contact.email);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   const {
     ref: ctaRef,
     onMouseMove: onCtaMouseMove,
@@ -154,20 +163,30 @@ export function ContactSection() {
 
           <div className="space-y-4">
             {contactCards.map(({ icon: Icon, title, subtitle, href }) => (
-              <a
-                key={title}
-                href={href}
-                target={href.startsWith("mailto:") ? undefined : "_blank"}
-                rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
-                data-reveal
-                className="rounded-xl border border-[#24262c] bg-[#131418] p-5 flex items-center gap-4 rim-glow-hover"
-              >
-                <Icon size={24} className="text-[#8b5cf6]" />
-                <div>
-                  <p className="font-bold text-[#f2f1ec]">{title}</p>
-                  <p className="text-sm text-[#a3a3ad]">{subtitle}</p>
-                </div>
-              </a>
+              <div key={title} data-reveal className="relative">
+                <a
+                  href={href}
+                  target={href.startsWith("mailto:") ? undefined : "_blank"}
+                  rel={href.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                  className="rounded-xl border border-[#24262c] bg-[#131418] p-5 flex items-center gap-4 rim-glow-hover"
+                >
+                  <Icon size={24} className="text-[#8b5cf6]" />
+                  <div>
+                    <p className="font-bold text-[#f2f1ec]">{title}</p>
+                    <p className="text-sm text-[#a3a3ad]">{subtitle}</p>
+                  </div>
+                </a>
+                {title === "Email" && (
+                  <button
+                    type="button"
+                    onClick={copyEmail}
+                    aria-label="Copy email address"
+                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#a3a3ad] hover:text-[#8b5cf6] transition-colors"
+                  >
+                    {copied ? <Check size={18} className="text-[#39d98a]" /> : <Copy size={18} />}
+                  </button>
+                )}
+              </div>
             ))}
           </div>
         </div>

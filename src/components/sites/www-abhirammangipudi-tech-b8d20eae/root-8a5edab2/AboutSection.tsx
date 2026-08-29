@@ -69,6 +69,19 @@ export function AboutSection() {
             </div>
           ))}
         </div>
+
+        <p data-reveal className="text-center mt-10">
+          <a
+            href="#projects"
+            onClick={(e) => {
+              e.preventDefault();
+              document.getElementById("projects")?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }}
+            className="text-[#8b5cf6] hover:text-[#a78bfa] font-semibold text-sm transition-colors"
+          >
+            See what I&apos;ve built →
+          </a>
+        </p>
       </div>
     </section>
   );

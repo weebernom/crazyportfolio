@@ -6,7 +6,7 @@ import { person } from "../root-8a5edab2/data";
 
 const EMOJIS = ["🚀", "💻", "🔧", "⚙️", "✨", "🎓", "🔥", "💡"];
 
-export function Footer() {
+export function Footer({ lastUpdated }: { lastUpdated: string }) {
   const [emoji, setEmoji] = useState(EMOJIS[0]);
 
   useEffect(() => {
@@ -26,6 +26,7 @@ export function Footer() {
         <div className="border-t border-[#24262c] pt-6 flex items-center justify-between flex-wrap gap-4">
           <span className="text-sm text-[#a3a3ad]">
             © {new Date().getFullYear()} {person.name}. All rights reserved.
+            <span className="hidden sm:inline"> · Last updated {lastUpdated}</span>
           </span>
           <span className="text-2xl">{emoji}</span>
           <button

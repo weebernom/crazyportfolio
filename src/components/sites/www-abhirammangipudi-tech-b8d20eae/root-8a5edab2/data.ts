@@ -199,5 +199,38 @@ export const navLinks = [
   "Experience",
   "Projects",
   "Education",
+  "FAQ",
   "Contact",
 ] as const;
+
+export interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export const faqs: FAQ[] = [
+  {
+    question: "What are you currently looking for?",
+    answer:
+      "Internships or entry-level roles in offensive security, AI security, or backend engineering. I'm open to remote and on-site work.",
+  },
+  {
+    question: "What's your tech stack?",
+    answer:
+      "Python and TypeScript day to day, Node.js/Express on the backend, and Nmap/Wireshark/Metasploit for security work. Full breakdown is in the Skills section above.",
+  },
+  {
+    question: "Are you open to freelance or contract work?",
+    answer:
+      "Yes, especially for pentesting, AI pipeline security audits, or automation builds. Email me with scope and timeline and I'll get back to you.",
+  },
+  {
+    question: "Where can I see your code?",
+    answer:
+      "GitHub is the best place — linked below. DLS Mentor and ig-quote-bot are the most complete write-ups.",
+  },
+  {
+    question: "How fast do you respond to emails?",
+    answer: "Usually within a day or two. If it's urgent, say so in the subject line.",
+  },
+];
