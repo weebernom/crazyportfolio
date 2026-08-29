@@ -4,6 +4,7 @@ import { Mail } from "lucide-react";
 import { GithubIcon, LinkedinIcon, InstagramIcon } from "../shared/icons";
 import { contact } from "./data";
 import { useScrollReveal } from "../shared/useScrollReveal";
+import { useMagnetic } from "../shared/useMagnetic";
 
 const contactCards = [
   { icon: GithubIcon, title: "GitHub", subtitle: "See what I made", href: contact.githubUrl },
@@ -127,6 +128,11 @@ function SystemDiagram() {
 
 export function ContactSection() {
   const ref = useScrollReveal<HTMLElement>();
+  const {
+    ref: ctaRef,
+    onMouseMove: onCtaMouseMove,
+    onMouseLeave: onCtaMouseLeave,
+  } = useMagnetic<HTMLAnchorElement>(0.3);
 
   return (
     <section id="contact" ref={ref} className="bg-[#08090b] scroll-mt-16 py-24">
@@ -168,6 +174,9 @@ export function ContactSection() {
 
         <div data-reveal className="flex justify-center mt-12">
           <a
+            ref={ctaRef}
+            onMouseMove={onCtaMouseMove}
+            onMouseLeave={onCtaMouseLeave}
             href={`mailto:${contact.email}`}
             className="inline-flex items-center justify-center rounded-lg font-bold px-8 py-4 text-base bg-[#8b5cf6] hover:bg-[#a78bfa] text-[#08090b] transition-colors"
           >

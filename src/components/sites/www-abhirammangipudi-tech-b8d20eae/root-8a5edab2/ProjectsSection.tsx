@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { projects } from "./data";
+import { projects, type Project } from "./data";
 import { GithubIcon } from "../shared/icons";
 import { useScrollReveal } from "../shared/useScrollReveal";
+import { useTilt } from "../shared/useTilt";
+import { useMagnetic } from "../shared/useMagnetic";
 
 const STATUS_COLOR: Record<string, string> = {
   Active: "#8b5cf6",
@@ -12,9 +14,61 @@ const STATUS_COLOR: Record<string, string> = {
   "Field-Tested": "#39d98a",
 };
 
+function ProjectCard({ project }: { project: Project }) {
+  const { ref: cardRef, onMouseMove, onMouseLeave } = useTilt<HTMLDivElement>(6);
+
+  return (
+    <div
+      ref={cardRef}
+      onMouseMove={onMouseMove}
+      onMouseLeave={onMouseLeave}
+      data-reveal
+      className="rounded-xl bg-[#131418] border border-[#24262c] rim-glow-hover p-6"
+      style={{ transformStyle: "preserve-3d", willChange: "transform" }}
+    >
+      <span
+        className="inline-block rounded-md border px-3 py-1 text-xs font-mono font-semibold mb-3"
+        style={{
+          borderColor: `${STATUS_COLOR[project.status]}80`,
+          color: STATUS_COLOR[project.status],
+        }}
+      >
+        {project.status}
+      </span>
+      <h3 className="font-heading text-xl font-bold text-[#f2f1ec] mb-2">{project.name}</h3>
+      <p className="text-[#a3a3ad] mb-4">{project.description}</p>
+      <div className="flex flex-wrap gap-2 mb-4">
+        {project.tech.map((t) => (
+          <span
+            key={t}
+            className="border border-[#24262c] text-[#a3a3ad] text-xs font-mono px-3 py-1 rounded-md"
+          >
+            {t}
+          </span>
+        ))}
+      </div>
+      <div className="flex items-center justify-end">
+        <a
+          href={project.codeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 rounded-md border border-[#8b5cf6] text-[#8b5cf6] hover:bg-[#8b5cf6]/10 px-4 py-2 text-sm font-semibold transition-colors"
+        >
+          <GithubIcon className="size-4" /> View Code
+        </a>
+      </div>
+    </div>
+  );
+}
+
 export function ProjectsSection() {
   const [visibleCount, setVisibleCount] = useState(4);
   const ref = useScrollReveal<HTMLElement>();
+  const {
+    ref: loadMoreRef,
+    onMouseMove: onLoadMoreMouseMove,
+    onMouseLeave: onLoadMoreMouseLeave,
+  } = useMagnetic<HTMLButtonElement>(0.25);
 
   return (
     <section id="projects" ref={ref} className="bg-[#08090b] scroll-mt-16 py-24">
@@ -29,51 +83,18 @@ export function ProjectsSection() {
           Here&apos;s how I used all the above mentioned skills.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6" style={{ perspective: 1000 }}>
           {projects.slice(0, visibleCount).map((project) => (
-            <div
-              key={project.name}
-              data-reveal
-              className="rounded-xl bg-[#131418] border border-[#24262c] rim-glow-hover p-6"
-            >
-              <span
-                className="inline-block rounded-md border px-3 py-1 text-xs font-mono font-semibold mb-3"
-                style={{
-                  borderColor: `${STATUS_COLOR[project.status]}80`,
-                  color: STATUS_COLOR[project.status],
-                }}
-              >
-                {project.status}
-              </span>
-              <h3 className="font-heading text-xl font-bold text-[#f2f1ec] mb-2">{project.name}</h3>
-              <p className="text-[#a3a3ad] mb-4">{project.description}</p>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {project.tech.map((t) => (
-                  <span
-                    key={t}
-                    className="border border-[#24262c] text-[#a3a3ad] text-xs font-mono px-3 py-1 rounded-md"
-                  >
-                    {t}
-                  </span>
-                ))}
-              </div>
-              <div className="flex items-center justify-end">
-                <a
-                  href={project.codeUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-[#8b5cf6] text-[#8b5cf6] hover:bg-[#8b5cf6]/10 px-4 py-2 text-sm font-semibold transition-colors"
-                >
-                  <GithubIcon className="size-4" /> View Code
-                </a>
-              </div>
-            </div>
+            <ProjectCard key={project.name} project={project} />
           ))}
         </div>
 
         {visibleCount < projects.length && (
           <div className="flex justify-center mt-12">
             <button
+              ref={loadMoreRef}
+              onMouseMove={onLoadMoreMouseMove}
+              onMouseLeave={onLoadMoreMouseLeave}
               type="button"
               onClick={() =>
                 setVisibleCount((v) => Math.min(v + 4, projects.length))
