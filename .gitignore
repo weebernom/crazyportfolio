@@ -47,3 +47,7 @@ next-env.d.ts
 
 # Local temp files
 temp/
+
+# Tool artifacts (local caches, not project source)
+graphify-out/
+.playwright-mcp/
